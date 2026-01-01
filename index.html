@@ -43,6 +43,14 @@
         background-color: #cbd5e1;
         border-radius: 20px;
       }
+      /* Animation */
+      .animate-fade-in {
+        animation: fadeIn 0.3s ease-in-out;
+      }
+      @keyframes fadeIn {
+        from { opacity: 0; transform: translateY(10px); }
+        to { opacity: 1; transform: translateY(0); }
+      }
       /* Modal Transition Classes */
       .modal-hidden {
         opacity: 0;
@@ -56,10 +64,9 @@
 <script type="importmap">
 {
   "imports": {
-    "react/": "https://esm.sh/react@^19.2.3/",
     "react": "https://esm.sh/react@^19.2.3",
-    "react-dom/": "https://esm.sh/react-dom@^19.2.3/",
-    "lucide-react": "https://esm.sh/lucide-react@^0.562.0"
+    "lucide-react": "https://esm.sh/lucide-react@^0.562.0",
+    "react/": "https://esm.sh/react@^19.2.3/"
   }
 }
 </script>
@@ -82,15 +89,15 @@
 
           <!-- Nav Links -->
           <nav class="hidden md:flex items-center gap-1">
-            <button class="flex items-center gap-2 px-3 py-2 text-sm font-medium text-indigo-600 bg-indigo-50 rounded-md transition-colors">
+            <button id="nav-dashboard" onclick="switchView('dashboard')" class="nav-btn flex items-center gap-2 px-3 py-2 text-sm font-medium text-indigo-600 bg-indigo-50 rounded-md transition-colors">
               <i data-lucide="layout-dashboard" class="w-4 h-4"></i>
               Dashboard
             </button>
-            <button class="flex items-center gap-2 px-3 py-2 text-sm font-medium text-slate-600 hover:text-indigo-600 hover:bg-slate-50 rounded-md transition-colors">
+            <button id="nav-agents" onclick="switchView('agents')" class="nav-btn flex items-center gap-2 px-3 py-2 text-sm font-medium text-slate-600 hover:text-indigo-600 hover:bg-slate-50 rounded-md transition-colors">
               <i data-lucide="users" class="w-4 h-4"></i>
               Agents
             </button>
-            <button class="flex items-center gap-2 px-3 py-2 text-sm font-medium text-slate-600 hover:text-indigo-600 hover:bg-slate-50 rounded-md transition-colors">
+            <button id="nav-settings" onclick="switchView('settings')" class="nav-btn flex items-center gap-2 px-3 py-2 text-sm font-medium text-slate-600 hover:text-indigo-600 hover:bg-slate-50 rounded-md transition-colors">
               <i data-lucide="settings" class="w-4 h-4"></i>
               Settings
             </button>
@@ -114,105 +121,370 @@
         </div>
       </header>
 
-      <!-- Main Content -->
-      <main class="flex-1 max-w-7xl w-full mx-auto px-4 sm:px-6 lg:px-8 py-8 space-y-8">
+      <!-- Main Content Container -->
+      <main class="flex-1 max-w-7xl w-full mx-auto px-4 sm:px-6 lg:px-8 py-8">
         
-        <!-- Header Section -->
-        <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
-          <div>
-            <h1 class="text-2xl font-bold text-slate-900 tracking-tight">Voice Agent Overview</h1>
-            <p class="text-slate-500 mt-1">Real-time monitoring and performance tracking.</p>
+        <!-- ==================== VIEW: DASHBOARD ==================== -->
+        <div id="view-dashboard" class="space-y-8 animate-fade-in">
+          <!-- Header Section -->
+          <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+            <div>
+              <h1 class="text-2xl font-bold text-slate-900 tracking-tight">Voice Agent Overview</h1>
+              <p class="text-slate-500 mt-1">Real-time monitoring and performance tracking.</p>
+            </div>
+            <div class="flex items-center gap-3">
+              <span class="text-xs font-medium text-slate-500 bg-white px-3 py-1.5 rounded-full border border-slate-200 shadow-sm">
+                Updates Live
+              </span>
+              <div class="h-2 w-2 rounded-full bg-emerald-500 animate-pulse"></div>
+            </div>
           </div>
-          <div class="flex items-center gap-3">
-            <span class="text-xs font-medium text-slate-500 bg-white px-3 py-1.5 rounded-full border border-slate-200 shadow-sm">
-              Updates Live
-            </span>
-            <div class="h-2 w-2 rounded-full bg-emerald-500 animate-pulse"></div>
+
+          <!-- KPIs -->
+          <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+            <!-- Total Calls -->
+            <div class="bg-white p-6 rounded-xl border border-slate-200 shadow-sm flex items-start justify-between">
+              <div>
+                <p class="text-sm font-medium text-slate-500">Total Calls Today</p>
+                <h3 class="text-3xl font-bold text-slate-900 mt-2">124</h3>
+                <div class="flex items-center mt-2 text-emerald-600 text-sm font-medium">
+                  <i data-lucide="arrow-up-right" class="w-4 h-4 mr-1"></i>
+                  <span>+12% vs yesterday</span>
+                </div>
+              </div>
+              <div class="p-3 bg-indigo-50 rounded-lg">
+                <i data-lucide="phone" class="w-6 h-6 text-indigo-600"></i>
+              </div>
+            </div>
+
+            <!-- Avg Duration -->
+            <div class="bg-white p-6 rounded-xl border border-slate-200 shadow-sm flex items-start justify-between">
+              <div>
+                <p class="text-sm font-medium text-slate-500">Avg. Duration</p>
+                <h3 class="text-3xl font-bold text-slate-900 mt-2">2m 45s</h3>
+                <div class="flex items-center mt-2 text-emerald-600 text-sm font-medium">
+                  <i data-lucide="check-circle" class="w-4 h-4 mr-1"></i>
+                  <span>Within target (2-4m)</span>
+                </div>
+              </div>
+              <div class="p-3 bg-indigo-50 rounded-lg">
+                <i data-lucide="clock" class="w-6 h-6 text-indigo-600"></i>
+              </div>
+            </div>
+
+            <!-- Success Rate -->
+            <div class="bg-white p-6 rounded-xl border border-slate-200 shadow-sm flex items-start justify-between">
+              <div>
+                <p class="text-sm font-medium text-slate-500">Success Rate</p>
+                <h3 class="text-3xl font-bold text-slate-900 mt-2">92.4%</h3>
+                <div class="flex items-center mt-2 text-emerald-600 text-sm font-medium">
+                  <i data-lucide="arrow-up-right" class="w-4 h-4 mr-1"></i>
+                  <span>+2.1% this week</span>
+                </div>
+              </div>
+              <div class="p-3 bg-indigo-50 rounded-lg">
+                <i data-lucide="check-circle" class="w-6 h-6 text-indigo-600"></i>
+              </div>
+            </div>
+          </div>
+
+          <!-- Main Content Area -->
+          <div class="bg-white rounded-xl border border-slate-200 shadow-sm overflow-hidden">
+            
+            <!-- Table Header / Toolbar -->
+            <div class="px-6 py-4 border-b border-slate-100 flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+              <h2 class="text-lg font-semibold text-slate-800">Recent Calls</h2>
+              <div class="relative">
+                <i data-lucide="search" class="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-slate-400"></i>
+                <input 
+                  type="text" 
+                  id="search-input"
+                  placeholder="Search by phone..." 
+                  class="pl-9 pr-4 py-2 text-sm border border-slate-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-500/20 focus:border-indigo-500 transition-all w-full sm:w-64"
+                />
+              </div>
+            </div>
+
+            <!-- Table -->
+            <div class="overflow-x-auto">
+              <table class="w-full text-left">
+                <thead class="bg-slate-50 text-xs uppercase text-slate-500 font-semibold">
+                  <tr>
+                    <th class="px-6 py-4">Status</th>
+                    <th class="px-6 py-4">Customer Phone</th>
+                    <th class="px-6 py-4">Time</th>
+                    <th class="px-6 py-4">Duration</th>
+                    <th class="px-6 py-4 text-right">Actions</th>
+                  </tr>
+                </thead>
+                <tbody id="calls-table-body" class="divide-y divide-slate-100">
+                  <!-- Rows will be populated by JS -->
+                </tbody>
+              </table>
+            </div>
           </div>
         </div>
 
-        <!-- KPIs -->
-        <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
-          <!-- Total Calls -->
-          <div class="bg-white p-6 rounded-xl border border-slate-200 shadow-sm flex items-start justify-between">
+        <!-- ==================== VIEW: AGENTS ==================== -->
+        <div id="view-agents" class="hidden space-y-8 animate-fade-in">
+           <!-- Header Section -->
+           <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
             <div>
-              <p class="text-sm font-medium text-slate-500">Total Calls Today</p>
-              <h3 class="text-3xl font-bold text-slate-900 mt-2">124</h3>
-              <div class="flex items-center mt-2 text-emerald-600 text-sm font-medium">
-                <i data-lucide="arrow-up-right" class="w-4 h-4 mr-1"></i>
-                <span>+12% vs yesterday</span>
-              </div>
+              <h1 class="text-2xl font-bold text-slate-900 tracking-tight">Manage Agents</h1>
+              <p class="text-slate-500 mt-1">Configure your AI assistants, set their prompts and voice characteristics.</p>
             </div>
-            <div class="p-3 bg-indigo-50 rounded-lg">
-              <i data-lucide="phone" class="w-6 h-6 text-indigo-600"></i>
-            </div>
+            <button class="bg-indigo-600 hover:bg-indigo-700 text-white px-4 py-2 rounded-lg text-sm font-medium flex items-center gap-2 transition-colors shadow-sm">
+                <i data-lucide="plus" class="w-4 h-4"></i>
+                Create New Agent
+            </button>
           </div>
 
-          <!-- Avg Duration -->
-          <div class="bg-white p-6 rounded-xl border border-slate-200 shadow-sm flex items-start justify-between">
-            <div>
-              <p class="text-sm font-medium text-slate-500">Avg. Duration</p>
-              <h3 class="text-3xl font-bold text-slate-900 mt-2">2m 45s</h3>
-              <div class="flex items-center mt-2 text-emerald-600 text-sm font-medium">
-                <i data-lucide="check-circle" class="w-4 h-4 mr-1"></i>
-                <span>Within target (2-4m)</span>
-              </div>
-            </div>
-            <div class="p-3 bg-indigo-50 rounded-lg">
-              <i data-lucide="clock" class="w-6 h-6 text-indigo-600"></i>
-            </div>
-          </div>
+          <!-- Agents Grid -->
+          <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+            
+            <!-- Agent Card 1 -->
+            <div class="bg-white border border-slate-200 rounded-xl p-6 shadow-sm hover:shadow-md transition-shadow group">
+                <div class="flex justify-between items-start mb-4">
+                    <div class="p-3 bg-indigo-50 rounded-lg group-hover:bg-indigo-100 transition-colors">
+                        <i data-lucide="headset" class="w-6 h-6 text-indigo-600"></i>
+                    </div>
+                    <div class="flex items-center gap-2">
+                        <span class="inline-flex items-center px-2 py-1 rounded-full text-xs font-medium bg-emerald-50 text-emerald-700 border border-emerald-100">Active</span>
+                    </div>
+                </div>
+                <h3 class="text-lg font-bold text-slate-900">Customer Support</h3>
+                <p class="text-sm text-slate-500 mt-1">Handles general inquiries and FAQs for inbound calls.</p>
+                
+                <div class="mt-4 space-y-3 bg-slate-50 p-3 rounded-lg border border-slate-100">
+                    <div class="flex items-center justify-between text-sm">
+                        <span class="text-slate-500 flex items-center gap-1"><i data-lucide="mic" class="w-3 h-3"></i> Voice</span>
+                        <span class="font-medium text-slate-700">Sarah (Neural)</span>
+                    </div>
+                    <div class="flex items-center justify-between text-sm">
+                        <span class="text-slate-500 flex items-center gap-1"><i data-lucide="cpu" class="w-3 h-3"></i> Model</span>
+                        <span class="font-medium text-slate-700">GPT-4o</span>
+                    </div>
+                </div>
 
-          <!-- Success Rate -->
-          <div class="bg-white p-6 rounded-xl border border-slate-200 shadow-sm flex items-start justify-between">
-            <div>
-              <p class="text-sm font-medium text-slate-500">Success Rate</p>
-              <h3 class="text-3xl font-bold text-slate-900 mt-2">92.4%</h3>
-              <div class="flex items-center mt-2 text-emerald-600 text-sm font-medium">
-                <i data-lucide="arrow-up-right" class="w-4 h-4 mr-1"></i>
-                <span>+2.1% this week</span>
-              </div>
+                <div class="mt-6 flex gap-3">
+                    <button onclick="alert('Playing voice sample...')" class="flex-1 px-3 py-2 text-sm font-medium text-slate-600 bg-white hover:bg-slate-50 rounded-lg transition-colors border border-slate-200 shadow-sm flex items-center justify-center gap-2">
+                        <i data-lucide="play" class="w-3 h-3"></i> Test
+                    </button>
+                    <button class="flex-1 px-3 py-2 text-sm font-medium text-white bg-slate-900 hover:bg-slate-800 rounded-lg transition-colors shadow-sm">Edit Config</button>
+                </div>
             </div>
-            <div class="p-3 bg-indigo-50 rounded-lg">
-              <i data-lucide="check-circle" class="w-6 h-6 text-indigo-600"></i>
+
+            <!-- Agent Card 2 -->
+            <div class="bg-white border border-slate-200 rounded-xl p-6 shadow-sm hover:shadow-md transition-shadow group">
+                <div class="flex justify-between items-start mb-4">
+                    <div class="p-3 bg-amber-50 rounded-lg group-hover:bg-amber-100 transition-colors">
+                        <i data-lucide="megaphone" class="w-6 h-6 text-amber-600"></i>
+                    </div>
+                    <div class="flex items-center gap-2">
+                        <span class="inline-flex items-center px-2 py-1 rounded-full text-xs font-medium bg-slate-100 text-slate-500 border border-slate-200">Paused</span>
+                    </div>
+                </div>
+                <h3 class="text-lg font-bold text-slate-900">Sales Outreach</h3>
+                <p class="text-sm text-slate-500 mt-1">Outbound cold calling agent for lead qualification.</p>
+                
+                <div class="mt-4 space-y-3 bg-slate-50 p-3 rounded-lg border border-slate-100">
+                    <div class="flex items-center justify-between text-sm">
+                        <span class="text-slate-500 flex items-center gap-1"><i data-lucide="mic" class="w-3 h-3"></i> Voice</span>
+                        <span class="font-medium text-slate-700">Marcus (Deep)</span>
+                    </div>
+                    <div class="flex items-center justify-between text-sm">
+                        <span class="text-slate-500 flex items-center gap-1"><i data-lucide="cpu" class="w-3 h-3"></i> Model</span>
+                        <span class="font-medium text-slate-700">Claude 3.5</span>
+                    </div>
+                </div>
+
+                <div class="mt-6 flex gap-3">
+                    <button onclick="alert('Playing voice sample...')" class="flex-1 px-3 py-2 text-sm font-medium text-slate-600 bg-white hover:bg-slate-50 rounded-lg transition-colors border border-slate-200 shadow-sm flex items-center justify-center gap-2">
+                        <i data-lucide="play" class="w-3 h-3"></i> Test
+                    </button>
+                    <button class="flex-1 px-3 py-2 text-sm font-medium text-white bg-slate-900 hover:bg-slate-800 rounded-lg transition-colors shadow-sm">Edit Config</button>
+                </div>
             </div>
+
+            <!-- Agent Card 3 -->
+            <div class="bg-white border border-slate-200 rounded-xl p-6 shadow-sm hover:shadow-md transition-shadow group">
+                <div class="flex justify-between items-start mb-4">
+                    <div class="p-3 bg-purple-50 rounded-lg group-hover:bg-purple-100 transition-colors">
+                        <i data-lucide="calendar" class="w-6 h-6 text-purple-600"></i>
+                    </div>
+                    <div class="flex items-center gap-2">
+                        <span class="inline-flex items-center px-2 py-1 rounded-full text-xs font-medium bg-emerald-50 text-emerald-700 border border-emerald-100">Active</span>
+                    </div>
+                </div>
+                <h3 class="text-lg font-bold text-slate-900">Appointment Setter</h3>
+                <p class="text-sm text-slate-500 mt-1">Manages calendar bookings and rescheduling.</p>
+                
+                <div class="mt-4 space-y-3 bg-slate-50 p-3 rounded-lg border border-slate-100">
+                    <div class="flex items-center justify-between text-sm">
+                        <span class="text-slate-500 flex items-center gap-1"><i data-lucide="mic" class="w-3 h-3"></i> Voice</span>
+                        <span class="font-medium text-slate-700">Emily (Soft)</span>
+                    </div>
+                    <div class="flex items-center justify-between text-sm">
+                        <span class="text-slate-500 flex items-center gap-1"><i data-lucide="cpu" class="w-3 h-3"></i> Model</span>
+                        <span class="font-medium text-slate-700">GPT-4o Mini</span>
+                    </div>
+                </div>
+
+                <div class="mt-6 flex gap-3">
+                    <button onclick="alert('Playing voice sample...')" class="flex-1 px-3 py-2 text-sm font-medium text-slate-600 bg-white hover:bg-slate-50 rounded-lg transition-colors border border-slate-200 shadow-sm flex items-center justify-center gap-2">
+                         <i data-lucide="play" class="w-3 h-3"></i> Test
+                    </button>
+                    <button class="flex-1 px-3 py-2 text-sm font-medium text-white bg-slate-900 hover:bg-slate-800 rounded-lg transition-colors shadow-sm">Edit Config</button>
+                </div>
+            </div>
+
           </div>
         </div>
 
-        <!-- Main Content Area -->
-        <div class="bg-white rounded-xl border border-slate-200 shadow-sm overflow-hidden">
-          
-          <!-- Table Header / Toolbar -->
-          <div class="px-6 py-4 border-b border-slate-100 flex flex-col sm:flex-row sm:items-center justify-between gap-4">
-            <h2 class="text-lg font-semibold text-slate-800">Recent Calls</h2>
-            <div class="relative">
-              <i data-lucide="search" class="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-slate-400"></i>
-              <input 
-                type="text" 
-                id="search-input"
-                placeholder="Search by phone..." 
-                class="pl-9 pr-4 py-2 text-sm border border-slate-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-500/20 focus:border-indigo-500 transition-all w-full sm:w-64"
-              />
+        <!-- ==================== VIEW: SETTINGS ==================== -->
+        <div id="view-settings" class="hidden space-y-8 animate-fade-in">
+            <!-- Header Section -->
+            <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+                <div>
+                  <h1 class="text-2xl font-bold text-slate-900 tracking-tight">Settings</h1>
+                  <p class="text-slate-500 mt-1">Manage your account, billing, and API preferences.</p>
+                </div>
+                <button class="bg-slate-900 hover:bg-slate-800 text-white px-4 py-2 rounded-lg text-sm font-medium transition-colors shadow-sm">
+                    Save Changes
+                </button>
             </div>
-          </div>
 
-          <!-- Table -->
-          <div class="overflow-x-auto">
-            <table class="w-full text-left">
-              <thead class="bg-slate-50 text-xs uppercase text-slate-500 font-semibold">
-                <tr>
-                  <th class="px-6 py-4">Status</th>
-                  <th class="px-6 py-4">Customer Phone</th>
-                  <th class="px-6 py-4">Time</th>
-                  <th class="px-6 py-4">Duration</th>
-                  <th class="px-6 py-4 text-right">Actions</th>
-                </tr>
-              </thead>
-              <tbody id="calls-table-body" class="divide-y divide-slate-100">
-                <!-- Rows will be populated by JS -->
-              </tbody>
-            </table>
-          </div>
+            <div class="grid grid-cols-1 lg:grid-cols-3 gap-8">
+                <!-- Sidebar -->
+                <div class="lg:col-span-1 space-y-2">
+                    <button onclick="switchSettingsTab('general')" id="tab-btn-general" class="settings-tab-btn w-full text-left px-4 py-2.5 rounded-lg bg-indigo-50 text-indigo-700 font-medium text-sm flex items-center gap-3 transition-colors">
+                        <i data-lucide="user" class="w-4 h-4"></i> General Profile
+                    </button>
+                    <button onclick="switchSettingsTab('api')" id="tab-btn-api" class="settings-tab-btn w-full text-left px-4 py-2.5 rounded-lg text-slate-600 hover:bg-slate-50 font-medium text-sm flex items-center gap-3 transition-colors">
+                        <i data-lucide="key" class="w-4 h-4"></i> API Keys
+                    </button>
+                    <button onclick="switchSettingsTab('billing')" id="tab-btn-billing" class="settings-tab-btn w-full text-left px-4 py-2.5 rounded-lg text-slate-600 hover:bg-slate-50 font-medium text-sm flex items-center gap-3 transition-colors">
+                        <i data-lucide="credit-card" class="w-4 h-4"></i> Billing & Plans
+                    </button>
+                    <button onclick="switchSettingsTab('notifications')" id="tab-btn-notifications" class="settings-tab-btn w-full text-left px-4 py-2.5 rounded-lg text-slate-600 hover:bg-slate-50 font-medium text-sm flex items-center gap-3 transition-colors">
+                        <i data-lucide="bell" class="w-4 h-4"></i> Notifications
+                    </button>
+                </div>
+
+                <!-- Form Area -->
+                <div class="lg:col-span-2">
+                    
+                    <!-- TAB: GENERAL -->
+                    <div id="settings-tab-general" class="space-y-6 settings-content">
+                        <!-- Profile Section -->
+                        <div class="bg-white border border-slate-200 rounded-xl p-6 shadow-sm">
+                            <h3 class="text-lg font-semibold text-slate-900 mb-4">Profile Information</h3>
+                            <div class="flex items-center gap-6 mb-6">
+                                <div class="w-20 h-20 bg-slate-200 rounded-full border border-slate-300 overflow-hidden relative group cursor-pointer">
+                                    <img src="https://picsum.photos/100/100" alt="Avatar" class="w-full h-full object-cover"/>
+                                    <div class="absolute inset-0 bg-black/40 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity">
+                                        <i data-lucide="camera" class="w-6 h-6 text-white"></i>
+                                    </div>
+                                </div>
+                                <div>
+                                    <button class="text-sm text-indigo-600 font-medium border border-indigo-200 px-3 py-1.5 rounded-md hover:bg-indigo-50 transition-colors">Change Photo</button>
+                                    <p class="text-xs text-slate-500 mt-2">JPG, GIF or PNG. Max size 800K</p>
+                                </div>
+                            </div>
+                            <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                                <div>
+                                    <label class="block text-sm font-medium text-slate-700 mb-1">First Name</label>
+                                    <input type="text" value="Admin" class="w-full px-3 py-2 border border-slate-300 rounded-lg text-sm focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 outline-none transition-shadow">
+                                </div>
+                                <div>
+                                    <label class="block text-sm font-medium text-slate-700 mb-1">Last Name</label>
+                                    <input type="text" value="User" class="w-full px-3 py-2 border border-slate-300 rounded-lg text-sm focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 outline-none transition-shadow">
+                                </div>
+                                <div class="md:col-span-2">
+                                    <label class="block text-sm font-medium text-slate-700 mb-1">Email Address</label>
+                                    <input type="email" value="admin@voiceauto.ai" class="w-full px-3 py-2 border border-slate-300 rounded-lg text-sm focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 outline-none transition-shadow">
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Company Section -->
+                        <div class="bg-white border border-slate-200 rounded-xl p-6 shadow-sm">
+                            <h3 class="text-lg font-semibold text-slate-900 mb-4">Company Details</h3>
+                            <div class="space-y-4">
+                                <div>
+                                    <label class="block text-sm font-medium text-slate-700 mb-1">Company Name</label>
+                                    <input type="text" value="VoiceAuto Inc." class="w-full px-3 py-2 border border-slate-300 rounded-lg text-sm focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 outline-none transition-shadow">
+                                </div>
+                                <div>
+                                    <label class="block text-sm font-medium text-slate-700 mb-1">Timezone</label>
+                                    <select class="w-full px-3 py-2 border border-slate-300 rounded-lg text-sm focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 outline-none transition-shadow bg-white">
+                                        <option>Pacific Time (US & Canada)</option>
+                                        <option>Eastern Time (US & Canada)</option>
+                                        <option selected>UTC (Coordinated Universal Time)</option>
+                                        <option>Europe/Istanbul</option>
+                                    </select>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- TAB: API KEYS -->
+                    <div id="settings-tab-api" class="space-y-6 settings-content hidden">
+                        <div class="bg-white border border-slate-200 rounded-xl p-6 shadow-sm">
+                            <h3 class="text-lg font-semibold text-slate-900 mb-1">API Credentials</h3>
+                            <p class="text-sm text-slate-500 mb-6">Manage your API keys for accessing the Voice Agent SDK.</p>
+                            
+                            <div class="space-y-4">
+                                <div class="p-4 bg-slate-50 border border-slate-200 rounded-lg flex items-center justify-between">
+                                    <div>
+                                        <p class="text-sm font-medium text-slate-900">Production Key</p>
+                                        <p class="text-xs text-slate-500 font-mono mt-1">pk_live_****************23f9</p>
+                                    </div>
+                                    <div class="flex gap-2">
+                                        <button class="p-2 text-slate-500 hover:text-indigo-600 hover:bg-white rounded-md transition-colors"><i data-lucide="copy" class="w-4 h-4"></i></button>
+                                        <button class="p-2 text-slate-500 hover:text-red-600 hover:bg-white rounded-md transition-colors"><i data-lucide="trash-2" class="w-4 h-4"></i></button>
+                                    </div>
+                                </div>
+                                <button class="text-sm text-indigo-600 font-medium flex items-center gap-2 hover:text-indigo-800">
+                                    <i data-lucide="plus-circle" class="w-4 h-4"></i> Generate New Key
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- TAB: Billing (Placeholder) -->
+                     <div id="settings-tab-billing" class="space-y-6 settings-content hidden">
+                        <div class="bg-white border border-slate-200 rounded-xl p-6 shadow-sm text-center py-12">
+                             <div class="w-16 h-16 bg-indigo-50 rounded-full flex items-center justify-center mx-auto mb-4">
+                                <i data-lucide="credit-card" class="w-8 h-8 text-indigo-600"></i>
+                             </div>
+                             <h3 class="text-lg font-semibold text-slate-900">Billing Portal</h3>
+                             <p class="text-sm text-slate-500 max-w-xs mx-auto mt-2">Manage your subscription, view invoices and update payment methods securely.</p>
+                             <button class="mt-6 bg-indigo-600 hover:bg-indigo-700 text-white px-5 py-2.5 rounded-lg text-sm font-medium shadow-sm transition-colors">
+                                 Open Customer Portal
+                             </button>
+                        </div>
+                     </div>
+                     
+                     <!-- TAB: Notifications (Placeholder) -->
+                     <div id="settings-tab-notifications" class="space-y-6 settings-content hidden">
+                        <div class="bg-white border border-slate-200 rounded-xl p-6 shadow-sm">
+                            <h3 class="text-lg font-semibold text-slate-900 mb-4">Email Notifications</h3>
+                            <div class="space-y-4">
+                                <label class="flex items-center justify-between p-3 border border-slate-100 rounded-lg hover:bg-slate-50 cursor-pointer">
+                                    <span class="text-sm text-slate-700">Weekly Performance Report</span>
+                                    <input type="checkbox" checked class="w-4 h-4 text-indigo-600 rounded border-slate-300 focus:ring-indigo-500">
+                                </label>
+                                <label class="flex items-center justify-between p-3 border border-slate-100 rounded-lg hover:bg-slate-50 cursor-pointer">
+                                    <span class="text-sm text-slate-700">New Agent Alerts</span>
+                                    <input type="checkbox" checked class="w-4 h-4 text-indigo-600 rounded border-slate-300 focus:ring-indigo-500">
+                                </label>
+                            </div>
+                        </div>
+                     </div>
+
+                </div>
+            </div>
         </div>
 
       </main>
@@ -349,6 +621,68 @@
           }
         ];
 
+        // --- View Switching Logic ---
+        function switchView(viewName) {
+            // Views
+            const views = ['dashboard', 'agents', 'settings'];
+            views.forEach(v => {
+                const el = document.getElementById('view-' + v);
+                if (v === viewName) {
+                    el.classList.remove('hidden');
+                } else {
+                    el.classList.add('hidden');
+                }
+            });
+
+            // Nav Buttons
+            const navs = ['nav-dashboard', 'nav-agents', 'nav-settings'];
+            const activeClass = "text-indigo-600 bg-indigo-50".split(" ");
+            const inactiveClass = "text-slate-600 hover:text-indigo-600 hover:bg-slate-50".split(" ");
+
+            navs.forEach(n => {
+                const btn = document.getElementById(n);
+                if (n === 'nav-' + viewName) {
+                    // Make Active
+                    btn.classList.remove(...inactiveClass);
+                    btn.classList.add(...activeClass);
+                } else {
+                    // Make Inactive
+                    btn.classList.remove(...activeClass);
+                    btn.classList.add(...inactiveClass);
+                }
+            });
+            
+            // Re-render icons just in case
+            setTimeout(() => lucide.createIcons(), 50);
+        }
+        
+        // --- Settings Tab Switching ---
+        function switchSettingsTab(tabName) {
+            // Hide all tab contents
+            const contents = document.querySelectorAll('.settings-content');
+            contents.forEach(c => c.classList.add('hidden'));
+            
+            // Show selected tab
+            document.getElementById('settings-tab-' + tabName).classList.remove('hidden');
+            
+            // Update button styles
+            const buttons = document.querySelectorAll('.settings-tab-btn');
+            const activeClass = "bg-indigo-50 text-indigo-700".split(" ");
+            const inactiveClass = "text-slate-600 hover:bg-slate-50".split(" ");
+            
+            buttons.forEach(btn => {
+                if(btn.id === 'tab-btn-' + tabName) {
+                    btn.classList.remove(...inactiveClass);
+                    btn.classList.add(...activeClass);
+                } else {
+                     btn.classList.remove(...activeClass);
+                     btn.classList.add(...inactiveClass);
+                }
+            });
+            
+            setTimeout(() => lucide.createIcons(), 50);
+        }
+
         // --- Helper Functions ---
         function getStatusBadgeHTML(status) {
             switch (status) {
@@ -370,7 +704,7 @@
                 case 'handed-off':
                     return `
                     <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-amber-50 text-amber-700 border border-amber-200">
-                        <i data-lucide="user-arrow-right" class="w-3 h-3 mr-1.5 inline"></i>
+                        <i data-lucide="phone-forwarded" class="w-3 h-3 mr-1.5 inline"></i>
                         Handed Off
                     </span>`;
                 default:
@@ -383,6 +717,7 @@
         const searchInput = document.getElementById('search-input');
 
         function renderTable(calls) {
+            if(!tableBody) return;
             tableBody.innerHTML = '';
             calls.forEach(call => {
                 const tr = document.createElement('tr');

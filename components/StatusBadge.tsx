@@ -1,6 +1,6 @@
 import React from 'react';
 import { CallStatus } from '../types';
-import { Radio, CheckCircle2, UserArrowRight } from 'lucide-react';
+import { Radio, CheckCircle2, PhoneForwarded } from 'lucide-react';
 
 interface StatusBadgeProps {
   status: CallStatus;
@@ -28,7 +28,7 @@ const StatusBadge: React.FC<StatusBadgeProps> = ({ status }) => {
     case 'handed-off':
       return (
         <span className="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-amber-50 text-amber-700 border border-amber-200">
-          <UserArrowRight className="w-3 h-3 mr-1.5" />
+          <PhoneForwarded className="w-3 h-3 mr-1.5" />
           Handed Off
         </span>
       );
