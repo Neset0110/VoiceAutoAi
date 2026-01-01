@@ -1,0 +1,493 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Voice AI Dashboard</title>
+    
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+      tailwind.config = {
+        theme: {
+          extend: {
+            colors: {
+              slate: {
+                850: '#1e293b',
+              }
+            },
+            fontFamily: {
+              sans: ['Inter', 'sans-serif'],
+            },
+          },
+        },
+      }
+    </script>
+
+    <!-- Lucide Icons -->
+    <script src="https://unpkg.com/lucide@latest"></script>
+
+    <style>
+      @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap');
+      body {
+        font-family: 'Inter', sans-serif;
+        background-color: #f8fafc;
+      }
+      .transcript-scroll::-webkit-scrollbar {
+        width: 6px;
+      }
+      .transcript-scroll::-webkit-scrollbar-track {
+        background: #f1f5f9;
+      }
+      .transcript-scroll::-webkit-scrollbar-thumb {
+        background-color: #cbd5e1;
+        border-radius: 20px;
+      }
+      /* Modal Transition Classes */
+      .modal-hidden {
+        opacity: 0;
+        pointer-events: none;
+      }
+      .modal-visible {
+        opacity: 1;
+        pointer-events: auto;
+      }
+    </style>
+<script type="importmap">
+{
+  "imports": {
+    "react/": "https://esm.sh/react@^19.2.3/",
+    "react": "https://esm.sh/react@^19.2.3",
+    "react-dom/": "https://esm.sh/react-dom@^19.2.3/",
+    "lucide-react": "https://esm.sh/lucide-react@^0.562.0"
+  }
+}
+</script>
+</head>
+<body class="text-slate-900">
+
+    <div class="min-h-screen bg-slate-50 flex flex-col">
+      
+      <!-- Top Navigation Bar -->
+      <header class="bg-white border-b border-slate-200 sticky top-0 z-30">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-16 flex items-center justify-between">
+          
+          <!-- Logo -->
+          <div class="flex items-center gap-2">
+            <div class="bg-indigo-600 p-1.5 rounded-lg">
+              <i data-lucide="mic-2" class="w-5 h-5 text-white"></i>
+            </div>
+            <span class="text-lg font-bold text-slate-900 tracking-tight">VoiceAuto<span class="text-indigo-600">.ai</span></span>
+          </div>
+
+          <!-- Nav Links -->
+          <nav class="hidden md:flex items-center gap-1">
+            <button class="flex items-center gap-2 px-3 py-2 text-sm font-medium text-indigo-600 bg-indigo-50 rounded-md transition-colors">
+              <i data-lucide="layout-dashboard" class="w-4 h-4"></i>
+              Dashboard
+            </button>
+            <button class="flex items-center gap-2 px-3 py-2 text-sm font-medium text-slate-600 hover:text-indigo-600 hover:bg-slate-50 rounded-md transition-colors">
+              <i data-lucide="users" class="w-4 h-4"></i>
+              Agents
+            </button>
+            <button class="flex items-center gap-2 px-3 py-2 text-sm font-medium text-slate-600 hover:text-indigo-600 hover:bg-slate-50 rounded-md transition-colors">
+              <i data-lucide="settings" class="w-4 h-4"></i>
+              Settings
+            </button>
+          </nav>
+
+          <!-- User Profile -->
+          <div class="flex items-center gap-4">
+            <div class="flex items-center gap-3">
+              <div class="text-right hidden sm:block">
+                <p class="text-sm font-medium text-slate-900">Admin User</p>
+                <p class="text-xs text-slate-500">Business Owner</p>
+              </div>
+              <div class="w-9 h-9 bg-slate-200 rounded-full border border-slate-300 overflow-hidden">
+                <img src="https://picsum.photos/100/100" alt="Avatar" class="w-full h-full object-cover"/>
+              </div>
+            </div>
+            <button class="text-slate-400 hover:text-slate-600">
+              <i data-lucide="log-out" class="w-5 h-5"></i>
+            </button>
+          </div>
+        </div>
+      </header>
+
+      <!-- Main Content -->
+      <main class="flex-1 max-w-7xl w-full mx-auto px-4 sm:px-6 lg:px-8 py-8 space-y-8">
+        
+        <!-- Header Section -->
+        <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+          <div>
+            <h1 class="text-2xl font-bold text-slate-900 tracking-tight">Voice Agent Overview</h1>
+            <p class="text-slate-500 mt-1">Real-time monitoring and performance tracking.</p>
+          </div>
+          <div class="flex items-center gap-3">
+            <span class="text-xs font-medium text-slate-500 bg-white px-3 py-1.5 rounded-full border border-slate-200 shadow-sm">
+              Updates Live
+            </span>
+            <div class="h-2 w-2 rounded-full bg-emerald-500 animate-pulse"></div>
+          </div>
+        </div>
+
+        <!-- KPIs -->
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+          <!-- Total Calls -->
+          <div class="bg-white p-6 rounded-xl border border-slate-200 shadow-sm flex items-start justify-between">
+            <div>
+              <p class="text-sm font-medium text-slate-500">Total Calls Today</p>
+              <h3 class="text-3xl font-bold text-slate-900 mt-2">124</h3>
+              <div class="flex items-center mt-2 text-emerald-600 text-sm font-medium">
+                <i data-lucide="arrow-up-right" class="w-4 h-4 mr-1"></i>
+                <span>+12% vs yesterday</span>
+              </div>
+            </div>
+            <div class="p-3 bg-indigo-50 rounded-lg">
+              <i data-lucide="phone" class="w-6 h-6 text-indigo-600"></i>
+            </div>
+          </div>
+
+          <!-- Avg Duration -->
+          <div class="bg-white p-6 rounded-xl border border-slate-200 shadow-sm flex items-start justify-between">
+            <div>
+              <p class="text-sm font-medium text-slate-500">Avg. Duration</p>
+              <h3 class="text-3xl font-bold text-slate-900 mt-2">2m 45s</h3>
+              <div class="flex items-center mt-2 text-emerald-600 text-sm font-medium">
+                <i data-lucide="check-circle" class="w-4 h-4 mr-1"></i>
+                <span>Within target (2-4m)</span>
+              </div>
+            </div>
+            <div class="p-3 bg-indigo-50 rounded-lg">
+              <i data-lucide="clock" class="w-6 h-6 text-indigo-600"></i>
+            </div>
+          </div>
+
+          <!-- Success Rate -->
+          <div class="bg-white p-6 rounded-xl border border-slate-200 shadow-sm flex items-start justify-between">
+            <div>
+              <p class="text-sm font-medium text-slate-500">Success Rate</p>
+              <h3 class="text-3xl font-bold text-slate-900 mt-2">92.4%</h3>
+              <div class="flex items-center mt-2 text-emerald-600 text-sm font-medium">
+                <i data-lucide="arrow-up-right" class="w-4 h-4 mr-1"></i>
+                <span>+2.1% this week</span>
+              </div>
+            </div>
+            <div class="p-3 bg-indigo-50 rounded-lg">
+              <i data-lucide="check-circle" class="w-6 h-6 text-indigo-600"></i>
+            </div>
+          </div>
+        </div>
+
+        <!-- Main Content Area -->
+        <div class="bg-white rounded-xl border border-slate-200 shadow-sm overflow-hidden">
+          
+          <!-- Table Header / Toolbar -->
+          <div class="px-6 py-4 border-b border-slate-100 flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+            <h2 class="text-lg font-semibold text-slate-800">Recent Calls</h2>
+            <div class="relative">
+              <i data-lucide="search" class="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-slate-400"></i>
+              <input 
+                type="text" 
+                id="search-input"
+                placeholder="Search by phone..." 
+                class="pl-9 pr-4 py-2 text-sm border border-slate-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-500/20 focus:border-indigo-500 transition-all w-full sm:w-64"
+              />
+            </div>
+          </div>
+
+          <!-- Table -->
+          <div class="overflow-x-auto">
+            <table class="w-full text-left">
+              <thead class="bg-slate-50 text-xs uppercase text-slate-500 font-semibold">
+                <tr>
+                  <th class="px-6 py-4">Status</th>
+                  <th class="px-6 py-4">Customer Phone</th>
+                  <th class="px-6 py-4">Time</th>
+                  <th class="px-6 py-4">Duration</th>
+                  <th class="px-6 py-4 text-right">Actions</th>
+                </tr>
+              </thead>
+              <tbody id="calls-table-body" class="divide-y divide-slate-100">
+                <!-- Rows will be populated by JS -->
+              </tbody>
+            </table>
+          </div>
+        </div>
+
+      </main>
+    </div>
+
+    <!-- Modal (Hidden by default) -->
+    <div id="call-modal" class="fixed inset-0 z-50 flex items-center justify-center p-4 bg-slate-900/50 backdrop-blur-sm transition-opacity duration-300 modal-hidden">
+      <div class="bg-white rounded-xl shadow-2xl w-full max-w-2xl overflow-hidden flex flex-col max-h-[90vh]">
+        
+        <!-- Modal Header -->
+        <div class="px-6 py-4 border-b border-slate-100 flex items-center justify-between bg-slate-50/50">
+          <div>
+            <div class="flex items-center gap-3 mb-1">
+              <h3 id="modal-phone" class="text-lg font-semibold text-slate-800"></h3>
+              <div id="modal-status-badge"></div>
+            </div>
+            <p id="modal-meta" class="text-sm text-slate-500"></p>
+          </div>
+          <button id="modal-close-btn" class="p-2 hover:bg-slate-100 rounded-full transition-colors text-slate-400 hover:text-slate-600">
+            <i data-lucide="x" class="w-5 h-5"></i>
+          </button>
+        </div>
+
+        <!-- Scrollable Content -->
+        <div class="overflow-y-auto p-6 space-y-6 transcript-scroll">
+          
+          <!-- Audio Player Placeholder -->
+          <div class="bg-slate-50 border border-slate-200 rounded-lg p-4">
+            <div class="flex items-center gap-4">
+              <button class="w-10 h-10 flex items-center justify-center bg-indigo-600 rounded-full text-white hover:bg-indigo-700 shadow-md transition-colors">
+                <i data-lucide="play" class="w-5 h-5 ml-1"></i>
+              </button>
+              <div class="flex-1">
+                <div class="h-1.5 bg-slate-200 rounded-full overflow-hidden">
+                  <div class="h-full w-1/3 bg-indigo-500 rounded-full"></div>
+                </div>
+                <div class="flex justify-between mt-1.5 text-xs text-slate-500 font-medium">
+                  <span>0:45</span>
+                  <span id="modal-duration-display"></span>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- AI Summary -->
+          <div class="bg-indigo-50/50 border border-indigo-100 rounded-lg p-4">
+            <h4 class="text-xs font-bold text-indigo-900 uppercase tracking-wider mb-2">AI Summary</h4>
+            <p id="modal-summary" class="text-sm text-slate-700 leading-relaxed"></p>
+          </div>
+
+          <!-- Transcript -->
+          <div>
+            <h4 class="text-xs font-bold text-slate-400 uppercase tracking-wider mb-4 border-b border-slate-100 pb-2">Transcript</h4>
+            <div id="modal-transcript" class="space-y-4">
+              <!-- Chat bubbles go here -->
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <script>
+        // --- Data ---
+        const MOCK_CALLS = [
+          {
+            id: "101",
+            customerPhone: "+90 555 123 4567",
+            status: "live",
+            startTime: "14:30",
+            duration: "02:15",
+            summary: "Ongoing conversation about subscription renewal.",
+            transcript: [
+              { role: "ai", text: "Hello, calling from Vapi Solutions. How can I help you today?" },
+              { role: "user", text: "Hi, I wanted to check if I can renew my subscription early." },
+              { role: "ai", text: "Absolutely. I can help you with that. Are you looking to keep the same plan?" }
+            ]
+          },
+          {
+            id: "102",
+            customerPhone: "+1 202 555 0199",
+            status: "completed",
+            startTime: "13:45",
+            duration: "04:12",
+            summary: "Customer scheduled a demo appointment for next Tuesday.",
+            transcript: [
+              { role: "ai", text: "Hello! Thank you for calling Vapi. How may I assist you?" },
+              { role: "user", text: "I'd like to book a demo for your CRM integration." },
+              { role: "ai", text: "Great choice. I can schedule that. Is Tuesday at 2 PM good for you?" },
+              { role: "user", text: "Yes, that works perfectly." },
+              { role: "ai", text: "Confirmed. You will receive an email shortly. Goodbye!" }
+            ]
+          },
+          {
+            id: "103",
+            customerPhone: "+44 7700 900077",
+            status: "handed-off",
+            startTime: "12:15",
+            duration: "01:30",
+            summary: "Complex billing dispute required human intervention.",
+            transcript: [
+              { role: "ai", text: "Hello, Vapi Support here." },
+              { role: "user", text: "I have a double charge on my invoice #99283." },
+              { role: "ai", text: "I see the invoice. Let me check the transaction history." },
+              { role: "user", text: "It's really frustrating, I need this resolved now." },
+              { role: "ai", text: "I understand. This requires authorization I don't have. Connecting you to a billing specialist now." }
+            ]
+          },
+          {
+            id: "104",
+            customerPhone: "+90 532 999 8877",
+            status: "completed",
+            startTime: "11:00",
+            duration: "02:45",
+            summary: "Customer asked about opening hours and location.",
+            transcript: [
+              { role: "ai", text: "Hello, how can I help?" },
+              { role: "user", text: "Are you open on Sundays?" },
+              { role: "ai", text: "Yes, we are open from 10 AM to 4 PM on Sundays." },
+              { role: "user", text: "Great, thanks!" }
+            ]
+          },
+          {
+            id: "105",
+            customerPhone: "+1 415 555 2233",
+            status: "completed",
+            startTime: "10:20",
+            duration: "03:10",
+            summary: "Inquiry about API pricing tiers.",
+            transcript: [
+                { role: "ai", text: "Welcome to Vapi. How can I direct your call?" },
+                { role: "user", text: "How much is the enterprise plan?" },
+                { role: "ai", text: "Enterprise pricing is custom based on volume. Would you like a sales rep to contact you?" }
+            ]
+          }
+        ];
+
+        // --- Helper Functions ---
+        function getStatusBadgeHTML(status) {
+            switch (status) {
+                case 'live':
+                    return `
+                    <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-emerald-100 text-emerald-800 border border-emerald-200">
+                        <span class="relative flex h-2 w-2 mr-1.5">
+                            <span class="animate-ping absolute inline-flex h-full w-full rounded-full bg-emerald-400 opacity-75"></span>
+                            <span class="relative inline-flex rounded-full h-2 w-2 bg-emerald-500"></span>
+                        </span>
+                        Live
+                    </span>`;
+                case 'completed':
+                    return `
+                    <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-slate-100 text-slate-600 border border-slate-200">
+                        <i data-lucide="check-circle-2" class="w-3 h-3 mr-1.5 inline"></i>
+                        Completed
+                    </span>`;
+                case 'handed-off':
+                    return `
+                    <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-amber-50 text-amber-700 border border-amber-200">
+                        <i data-lucide="user-arrow-right" class="w-3 h-3 mr-1.5 inline"></i>
+                        Handed Off
+                    </span>`;
+                default:
+                    return '';
+            }
+        }
+
+        // --- Render Functions ---
+        const tableBody = document.getElementById('calls-table-body');
+        const searchInput = document.getElementById('search-input');
+
+        function renderTable(calls) {
+            tableBody.innerHTML = '';
+            calls.forEach(call => {
+                const tr = document.createElement('tr');
+                tr.className = "hover:bg-slate-50/50 transition-colors group";
+                tr.innerHTML = `
+                    <td class="px-6 py-4 whitespace-nowrap">
+                        ${getStatusBadgeHTML(call.status)}
+                    </td>
+                    <td class="px-6 py-4 text-sm font-medium text-slate-700 whitespace-nowrap">
+                        ${call.customerPhone}
+                    </td>
+                    <td class="px-6 py-4 text-sm text-slate-500 whitespace-nowrap">
+                        ${call.startTime}
+                    </td>
+                    <td class="px-6 py-4 text-sm text-slate-500 whitespace-nowrap font-mono">
+                        ${call.duration}
+                    </td>
+                    <td class="px-6 py-4 text-right whitespace-nowrap">
+                        <button 
+                            onclick="openModal('${call.id}')"
+                            class="text-sm font-medium text-indigo-600 hover:text-indigo-800 bg-indigo-50 hover:bg-indigo-100 px-3 py-1.5 rounded-md transition-colors"
+                        >
+                            Review
+                        </button>
+                    </td>
+                `;
+                tableBody.appendChild(tr);
+            });
+            lucide.createIcons(); // Re-initialize icons for new DOM elements
+        }
+
+        // --- Modal Logic ---
+        const modal = document.getElementById('call-modal');
+        const modalPhone = document.getElementById('modal-phone');
+        const modalBadge = document.getElementById('modal-status-badge');
+        const modalMeta = document.getElementById('modal-meta');
+        const modalSummary = document.getElementById('modal-summary');
+        const modalTranscript = document.getElementById('modal-transcript');
+        const modalDuration = document.getElementById('modal-duration-display');
+        const modalCloseBtn = document.getElementById('modal-close-btn');
+
+        function openModal(callId) {
+            const call = MOCK_CALLS.find(c => c.id === callId);
+            if (!call) return;
+
+            // Populate Data
+            modalPhone.textContent = call.customerPhone;
+            modalBadge.innerHTML = getStatusBadgeHTML(call.status);
+            modalMeta.textContent = `${call.startTime} • Duration: ${call.duration}`;
+            modalSummary.textContent = call.summary;
+            modalDuration.textContent = call.duration;
+
+            // Render Transcript
+            modalTranscript.innerHTML = '';
+            call.transcript.forEach(msg => {
+                const isAi = msg.role === 'ai';
+                const div = document.createElement('div');
+                div.className = `flex ${isAi ? 'justify-start' : 'justify-end'}`;
+                div.innerHTML = `
+                  <div class="flex max-w-[80%] gap-3 ${!isAi ? 'flex-row-reverse' : ''}">
+                    <div class="w-8 h-8 rounded-full flex-shrink-0 flex items-center justify-center ${isAi ? 'bg-slate-100 text-slate-600' : 'bg-indigo-100 text-indigo-600'}">
+                       <i data-lucide="${isAi ? 'bot' : 'user'}" class="w-4 h-4"></i>
+                    </div>
+                    <div class="p-3 rounded-2xl text-sm leading-relaxed shadow-sm ${isAi ? 'bg-white border border-slate-200 text-slate-700 rounded-tl-none' : 'bg-indigo-600 text-white rounded-tr-none'}">
+                      ${msg.text}
+                    </div>
+                  </div>
+                `;
+                modalTranscript.appendChild(div);
+            });
+
+            // Show Modal
+            modal.classList.remove('modal-hidden');
+            modal.classList.add('modal-visible');
+            
+            // Re-init icons inside modal
+            lucide.createIcons();
+        }
+
+        function closeModal() {
+            modal.classList.remove('modal-visible');
+            modal.classList.add('modal-hidden');
+        }
+
+        modalCloseBtn.addEventListener('click', closeModal);
+        
+        // Close on background click
+        modal.addEventListener('click', (e) => {
+            if (e.target === modal) {
+                closeModal();
+            }
+        });
+
+        // --- Search Logic ---
+        searchInput.addEventListener('input', (e) => {
+            const term = e.target.value.toLowerCase();
+            const filtered = MOCK_CALLS.filter(call => 
+                call.customerPhone.toLowerCase().includes(term)
+            );
+            renderTable(filtered);
+        });
+
+        // --- Initialization ---
+        renderTable(MOCK_CALLS);
+        lucide.createIcons();
+    </script>
+</body>
+</html>
